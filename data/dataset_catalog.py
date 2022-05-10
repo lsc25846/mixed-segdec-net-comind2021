@@ -2,6 +2,7 @@ from .input_ksdd import KSDDDataset
 from .input_dagm import DagmDataset
 from .input_steel import SteelDataset
 from .input_ksdd2 import KSDD2Dataset
+from .input_owndata import OwnDataset #新增
 from config import Config
 from torch.utils.data import DataLoader
 from typing import Optional
@@ -20,12 +21,14 @@ def get_dataset(kind: str, cfg: Config) -> Optional[DataLoader]:
         ds = SteelDataset(kind, cfg)
     elif cfg.DATASET == "KSDD2":
         ds = KSDD2Dataset(kind, cfg)
+    elif cfg.DATASET == "owndata": #新增
+        ds = OwnDataset(kind, cfg)
     else:
         raise Exception(f"Unknown dataset {cfg.DATASET}")
 
     shuffle = kind == "TRAIN"
     batch_size = cfg.BATCH_SIZE if kind == "TRAIN" else 1
-    num_workers = 0
+    num_workers = 1
     drop_last = kind == "TRAIN"
     pin_memory = False
 
